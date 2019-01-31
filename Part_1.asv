@@ -40,22 +40,19 @@ h0 = ah(v0) ./ (ah(v0) + bh(v0));
 %% Plots of gating Probabilities and membrane potential with various current injection value :
 
 % defining hh model equation :
-I = 5;
 
 func = @(t,p) [ (1/C)*(I-(gK*p(2).^4.*(p(1) - vK)) - (gNa*p(3).^3.*p(4).*(p(1)-vNa))-(gL.*(p(1)-vL)));
     ( (an(p(1)).*(1-p(2))) - (bn(p(1)).*p(2)) );
     ( (am(p(1)).*(1-p(3))) - (bm(p(1)).*p(3)) ); 
     ( (ah(p(1)).*(1-p(4))) - (bh(p(1)).*p(4)) ) ] ;
 
+I = 5;
 tspan = [0 800] ;
 
 [T, Parameters] = ode15s(func, tspan, [v0 n0 m0 h0]);
 
 I = 0;
-[t,p] = ode15s(func,T(end):1000,Parameters(end,:));
-T = [T;t(2:end)];
-Parameters = [Parameters;p(2:end,:)];
-
+[t,y] = ode15s(@(t,y)myfun(t,y,a),tspan+T(end),Y(end,:));
 
 figure
 plot(T,Parameters(:,1));
