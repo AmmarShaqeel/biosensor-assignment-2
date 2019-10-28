@@ -47,14 +47,20 @@ func = @(t,p) [ (1/C)*(I-(gK*p(2).^4.*(p(1) - vK)) - (gNa*p(3).^3.*p(4).*(p(1)-v
     ( (am(p(1)).*(1-p(3))) - (bm(p(1)).*p(3)) ); 
     ( (ah(p(1)).*(1-p(4))) - (bh(p(1)).*p(4)) ) ] ;
 
-tspan = [0 800] ;
+tspan = [0 200] ;
 
 [T, Parameters] = ode15s(func, tspan, [v0 n0 m0 h0]);
 
 I = 0;
-[t,p] = ode15s(func,T(end):1000,Parameters(end,:));
+[t,p] = ode15s(func,T(end):600,Parameters(end,:));
 T = [T;t(2:end)];
 Parameters = [Parameters;p(2:end,:)];
+
+I = 5;
+[t,p] = ode15s(func,T(end):1000,[v0 n0 m0 h0]);
+T = [T;t(2:end)];
+Parameters = [Parameters;p(2:end,:)];
+
 
 
 figure
